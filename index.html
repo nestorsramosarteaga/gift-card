@@ -23,9 +23,10 @@
 
         .gift-container {
             position: relative;
-            width: 400px;
-            height: 300px;
+            width: 450px;
+            height: 600px;
             perspective: 1000px;
+            margin: 0 auto;
         }
 
         .gift-box {
@@ -35,6 +36,7 @@
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            transform-origin: center;
         }
 
         .gift-box.opened {
@@ -45,6 +47,8 @@
             position: absolute;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
             backface-visibility: hidden;
             border-radius: 15px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -88,10 +92,37 @@
             background: white;
             transform: rotateY(180deg);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
             border: 3px solid #ddd;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #aeff6b, #0d5506);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
         }
 
         .gift-icon {
@@ -185,7 +216,7 @@
         @media (max-width: 480px) {
             .gift-container {
                 width: 320px;
-                height: 240px;
+                height: 480px;
             }
             
             .gift-icon {
@@ -214,6 +245,7 @@
             </div>
             <div class="gift-face gift-back">
                 <img id="bonusImage" src="./vicky-gift-card.jpeg" alt="Bono de Regalo" class="bonus-image">
+                <button id="downloadBtn" class="download-btn">Descargar Bono</button>
             </div>
         </div>
     </div>
@@ -221,6 +253,7 @@
     <script>
         const giftBox = document.getElementById('giftBox');
         const sparkles = document.getElementById('sparkles');
+        const downloadBtn = document.getElementById('downloadBtn');
         let isOpened = false;
 
         // Crear partículas brillantes
@@ -256,12 +289,26 @@
         giftBox.addEventListener('click', function() {
             if (!isOpened) {
                 giftBox.classList.add('opened');
+                // Show download button after flip animation completes
+                setTimeout(() => {
+                    downloadBtn.style.display = 'block';
+                }, 800);
                 createConfetti();
                 isOpened = true;
             } else {
                 giftBox.classList.remove('opened');
                 isOpened = false;
             }
+        });
+
+        // Handle download button click
+        downloadBtn.addEventListener('click', function() {
+            const link = document.createElement('a');
+            link.href = './vicky-gift-card.jpeg';
+            link.download = 'bono-regalo-vicky.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
 
         // Inicializar efectos
